@@ -51,6 +51,10 @@ app.get("/cars/", (req, res) => {
     res.send("error")
 })
 
+// app.get("/json/authors/:jsonid", (req, res) => {
+//     res.send(`${JSON.stringify(json[req.params.jsonid])}`)
+// })
+
 app.get("/json/authors/:jsonid", (req, res) => {
-    res.send(`${JSON.stringify(json[req.params.jsonid])}`)
+    res.json(json[req.params.jsonid])
 })
