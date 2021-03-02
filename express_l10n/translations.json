@@ -1,0 +1,14 @@
+{
+    "fr": {
+        "bonjour": "bonjour",
+        "flag": "./img/france.png"
+    },
+    "es": {
+        "bonjour": "hola",
+        "flag": "./img/spain.png"
+    },
+    "en": {
+        "bonjour": "hi",
+        "flag": "./img/english.png"
+    }
+}
