@@ -10,7 +10,7 @@ function App() {
 
     let alreadyExist = false
     
-    for (let i = 0; i < students.length; i++) {
+    for (let i = 0; i <= students.length; i++) {
       if (students[i].toLowerCase() == newStudents.toLocaleLowerCase()) {
         alreadyExist = true
         return alert('pas possible mec')
