@@ -17,13 +17,13 @@ function App() {
     <div className="App">
       <header className="App-header">
         {/* <input type="text" onChange={(event) => {setAssociation(event.target.value)}}></input> */}
-        <button onClick={search('konexio')}>Konexio</button>
-        <button onClick={search('restau-du-coeur')}>Restau du coeur</button>
-        <button onClick={search('la-croix-rouge')}>La croix rouge</button>
+        <button onClick={() => { search('konexio') }}>Konexio</button>
+        <button onClick={() => { search('restau-du-coeur') }}>Restau du coeur</button>
+        <button onClick={() => { search('la-croix-rouge') }}>La croix rouge</button>
         {association != undefined &&
           <>
-          <p>{association.name}</p>
-                  <p>{association.description}</p>
+            <p>{association.name}</p>
+            <p>{association.description}</p>
           </>
         }
       </header>
