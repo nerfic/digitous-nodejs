@@ -37,7 +37,7 @@ app.post("/signup", async (req, res) => {
             })
             return;
         }
-        if (req.body.password < 8) {
+        if (req.body.password.length < 8) {
             res.status(400).json({
                 error: "Password to short"
             })
@@ -55,7 +55,7 @@ app.post("/signup", async (req, res) => {
             surname: req.body.surname,
             dateOfBirth: req.body.dateOfBirth,
             password: bcrypt.hashSync(req.body.password),
-        })
+        }).exec()
         res.send("User create");
 
     } catch (error) {
@@ -65,34 +65,40 @@ app.post("/signup", async (req, res) => {
 })
 
 app.post("/login", async (req, res) => {
-    const user = await userModel.findOne({
-        email: req.body.email
-    })
-
-    if (bcrypt.compareSync(req.body.password, user.password)) {
-        const token = jwt.sign({
-            id: user._id
-        }, config.secret, {
-            expiresIn: 3600
+    try {
+        const user = await userModel.findOne({
+            email: req.body.email
         })
-        res.status(200).json({
-            message: "Connected",
-            token: token
-        })
-    } else {
-        res.status(401).send("Mauvais identifiants")
+        if (bcrypt.compareSync(req.body.password, user.password)) {
+            const token = jwt.sign({
+                id: user._id
+            }, config.secret, {
+                expiresIn: 3600
+            })
+            res.status(200).json({
+                message: "Connected",
+                token: token
+            })
+        } else {
+            res.status(401).send("Mauvais identifiants")
+        }
+    } catch (error) {
+        res.send("Erreur")
     }
 })
 
 app.get("/admin", async (req, res) => {
     try {
         const token = req.headers.authorization
+        console.log(token)
         const result = jwt.verify(token.split(" ")[1], config.secret)
-        const user = await userModel.findOne({
-            _id: result.id
-        }).exec();
-        res.status(200).send("connected")
+        console.log(result)
+        res.status(200).json({
+            message: "connected"
+        })
     } catch (error) {
-        res.status(401).send("Pas les droits")
+        res.status(401).json({
+            message: "Pas les droits"
+        })
     }
 })
