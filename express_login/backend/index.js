@@ -4,6 +4,7 @@ const cors = require("cors")
 const mongoose = require("mongoose")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const expressValidator = require ("express-validator")
 
 const config = require("./config")
 const userModel = require("./models/user")
@@ -26,23 +27,35 @@ mongoose.connect(`mongodb://localhost:${config.mongoDBPort}/login`, { useNewUrlP
     console.log('MongoDB connected, port', config.mongoDBPort)
 })
 
-app.post("/signup", async (req, res) => {
+app.post("/signup", 
+expressValidator.body("email").isEmail(),
+expressValidator.body('password').isLength({ min: 8 }),
+expressValidator.body('firstName').isLength({ min: 4 }),
+expressValidator.body('city').matches('[paris]'),
+async (req, res) => {
     try {
+        const errors = expressValidator.validationResult(req);
         const userExist = await userModel.findOne({
             email: req.body.email
         });
+        if (!errors.isEmpty()) {
+            res.status(400).json({ 
+                errors: errors.array()
+              });
+            return;
+          }
         if (userExist) {
             res.status(400).json({
                 error: "Email already exist"
             })
             return;
         }
-        if (req.body.password.length < 8) {
-            res.status(400).json({
-                error: "Password to short"
-            })
-            return;
-        }
+        // if (req.body.password.length < 8) {
+        //     res.status(400).json({
+        //         error: "Password to short"
+        //     })
+        //     return;
+        // }
         if (req.body.password !== req.body.passwordConfirm) {
             res.status(400).json({
                 error: "Password not match"
@@ -55,6 +68,7 @@ app.post("/signup", async (req, res) => {
             surname: req.body.surname,
             dateOfBirth: req.body.dateOfBirth,
             password: bcrypt.hashSync(req.body.password),
+            city: req.body.city
         }).exec()
         res.status(200).json({
             success: "User created"
