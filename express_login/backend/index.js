@@ -92,9 +92,12 @@ app.get("/admin", async (req, res) => {
         const token = req.headers.authorization
         console.log(token)
         const result = jwt.verify(token.split(" ")[1], config.secret)
+        const listUsers = await userModel.find().select(["firstName", "email"]).lean()
+        console.log(listUsers)
         console.log(result)
         res.status(200).json({
-            message: "connected"
+            message: "connected",
+            users: listUsers
         })
     } catch (error) {
         res.status(401).json({
