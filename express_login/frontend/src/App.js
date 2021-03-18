@@ -3,11 +3,11 @@ import { useState, useEffect } from "react"
 import Signup from "./views/signup"
 import Login from "./views/Login"
 import Admin from "./views/Admin"
+import Logout from "./views/Logout"
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom"
 
 function App() {
 
-  const [token, setToken] = useState(localStorage.getItem('token'));
   const [isConnected, setIsConnected] = useState(false)
 
   const connected = () => {
@@ -34,10 +34,17 @@ function App() {
 
   return (
     <Router>
-      <Link to="/login">Login</Link>
-      <Link to="/signup">Signup</Link>
+      {!isConnected &&
+        <>
+          <Link className="mr-3" to="/login">Login</Link>
+          <Link className="mr-3" to="/signup">Signup</Link>
+        </>
+      }
       {isConnected &&
-        <Link to="/admin">Admin</Link>
+        <>
+        <Link className="mr-3" to="/admin">Admin</Link>
+        <Link onClick={() => {return localStorage.removeItem('token')}} className="mr-3" to="/logout">Logout</Link>
+        </>
       }
       <Switch>
         <Route path="/login">

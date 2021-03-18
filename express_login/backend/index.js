@@ -56,7 +56,9 @@ app.post("/signup", async (req, res) => {
             dateOfBirth: req.body.dateOfBirth,
             password: bcrypt.hashSync(req.body.password),
         }).exec()
-        res.send("User create");
+        res.status(200).json({
+            success: "User created"
+        });
 
     } catch (error) {
         console.log(error)

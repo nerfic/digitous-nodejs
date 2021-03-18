@@ -27,8 +27,8 @@ function Signup() {
                 return response.json()
             })
             .then(response => {
-                setError(response.error)
-                console.log(response.error)
+                console.log("response =",response.error)
+                setError(response.error)  
             })
             .catch((error) => {
                 console.log(error)
